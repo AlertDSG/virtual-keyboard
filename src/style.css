@@ -74,7 +74,14 @@ button {
     border-radius: 4px;
     background-color: rgb(40, 38, 38);
     color: azure;
-    box-shadow: 5px ;
+    box-shadow: 5px;
+    transition: all .2s;
+}
+
+.keyboard__key-active {
+    background-color: green;
+    border-radius: 10px;
+    transition: all .2s;
 }
 
 .width-midle {
@@ -121,8 +128,29 @@ button {
     width: 152px;
 }
 
-.width-more {
+.caps-lock {
     width: 140px;
+    position: relative;
+}
+
+.caps-lock::before {
+    content: '';
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background-color: red;
+    right: 10px;
+}
+
+.active::before {
+    content: '';
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background-color: green;
+    right: 10px;
 }
 
 .space {

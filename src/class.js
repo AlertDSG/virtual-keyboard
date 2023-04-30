@@ -17,21 +17,21 @@ export default class Letters {
     this.arr.forEach((letter) => {
       const child = document.createElement('button');
       child.innerText = String(Object.values(letter)[0]);
-      child.dataset.dataKey = String(Object.keys(letter)[0]);
-      if (child.dataset.dataKey === 'Backspace') {
+      child.dataset.Key = String(Object.keys(letter)[0]);
+      if (child.dataset.Key === 'Backspace') {
         child.classList.add('width');
-      } else if (child.dataset.dataKey === 'CapsLock') {
-        child.classList.add('width-more');
-      } else if (child.dataset.dataKey === 'Tab' || child.dataset.dataKey === 'Enter') {
+      } else if (child.dataset.Key === 'CapsLock') {
+        child.classList.add('caps-lock');
+      } else if (child.dataset.Key === 'Tab' || child.dataset.dataKey === 'Enter') {
         child.classList.add('width-midle');
-        if (child.dataset.dataKey === 'Enter') {
+        if (child.dataset.Key === 'Enter') {
           child.classList.add('enter');
         }
-      } else if (child.dataset.dataKey === 'ShiftLeft' || child.dataset.dataKey === 'ShiftRight') {
+      } else if (child.dataset.Key === 'ShiftLeft' || child.dataset.dataKey === 'ShiftRight') {
         child.classList.add('shift');
-      } else if (child.dataset.dataKey === 'Space') {
+      } else if (child.dataset.Key === 'Space') {
         child.classList.add('space');
-      } else if (child.dataset.dataKey === 'ArrowDown') {
+      } else if (child.dataset.Key === 'ArrowDown') {
         child.classList.add('down');
       }
       child.classList.add('keyboard__key');
@@ -41,5 +41,28 @@ export default class Letters {
     container.append(textField);
     container.append(keyboard);
     window.document.body.prepend(container);
+    document.querySelector('.text-field').addEventListener('keydown', this.logDownKey);
+    document.querySelector('.text-field').addEventListener('keyup', this.logUpKey);
+  }
+
+  // eslint-disable-next-line class-methods-use-this
+  logDownKey(e) {
+    if (e.code === 'CapsLock') {
+      const capsLock = document.querySelector('.caps-lock');
+      if (capsLock.classList.contains('active')) {
+        capsLock.classList.remove('active');
+      } else {
+        capsLock.classList.add('active');
+      }
+    } else if (e.code === 'Tab') {
+      e.preventDefault();
+      document.querySelector('.text-field').value += '\t';
+    }
+    document.querySelector(`.keyboard__key[data--Key=${e.code}]`).classList.add('keyboard__key-active');
+  }
+
+  // eslint-disable-next-line class-methods-use-this
+  logUpKey(e) {
+    document.querySelector(`.keyboard__key[data--Key=${e.code}]`).classList.remove('keyboard__key-active');
   }
 }
