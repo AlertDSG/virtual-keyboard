@@ -67,7 +67,7 @@ function logUpKey(e) {
   if (!document.querySelector(`.keyboard__key[data--Key=${e.code}]`)) {
     e.preventDefault();
     return;
-  };
+  }
 
   if (document.querySelector('.keyboard__key[data--Key=ShiftLeft]').classList.contains('keyboard__key-active') && document.querySelector('.keyboard__key[data--Key=AltLeft]').classList.contains('keyboard__key-active')) {
     lang = lang === 'ru' ? 'en' : 'ru';
@@ -98,7 +98,7 @@ function init() {
 
   const keyboard = document.createElement('div');
   keyboard.classList.add('keyboard');
-  data[lang].forEach((letter) => {
+  [...data[lang]].forEach((letter) => {
     const child = document.createElement('button');
     child.innerText = String(...Object.values(letter));
     child.dataset.Key = String(...Object.keys(letter));
@@ -139,7 +139,6 @@ function init() {
 window.addEventListener('DOMContentLoaded', init);
 
 document.addEventListener('mousedown', (e) => {
-  console.log(e.target.dataset.Key)
   if (e.target.dataset.Key) {
     if (e.target.dataset.Key === 'Tab') {
       document.querySelector('.text-field').value += '\t';
@@ -151,7 +150,7 @@ document.addEventListener('mousedown', (e) => {
       document.querySelector('.text-field').value += '\n';
       document.querySelector('.enter').classList.remove('enter-passive');
       document.querySelector('.enter').classList.add('enter-active');
-    } if (e.target.dataset.Key === 'AltLeft') {
+    } else if (e.target.dataset.Key === 'AltLeft') {
       document.querySelector(`.keyboard__key[data--Key=${e.target.dataset.Key}]`).classList.add('keyboard__key-active');
     } else if (e.target.dataset.Key === 'Backspace') {
       const textField = document.querySelector('.text-field');
