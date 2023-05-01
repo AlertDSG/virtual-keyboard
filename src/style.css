@@ -78,6 +78,14 @@ button {
     transition: all .2s;
 }
 
+.key-up {
+    text-transform: uppercase;
+}
+
+.key-low {
+    text-transform: lowercase;
+}
+
 .keyboard__key-active {
     background-color: green;
     border-radius: 10px;
@@ -96,7 +104,7 @@ button {
 
 @media (min-width: 900px) {
 
-    .enter:before {
+    .enter-passive::before {
         content: '';
         position: absolute;
         top: 49px;
@@ -107,7 +115,23 @@ button {
         border: none;
         border-bottom-right-radius: 4px;
         border-bottom-left-radius: 4px;
-        background-color: rgb(40, 38, 38);;
+        background-color: rgb(40, 38, 38);
+        transition: all .2s;
+    }
+
+    .enter-active::before {
+        content: '';
+        position: absolute;
+        top: 49px;
+        bottom: 0;
+        right: 0;
+        width: 52px;
+        height: 57px;
+        border: none;
+        border-bottom-right-radius: 10px;
+        border-bottom-left-radius: 10px;
+        background-color: green;
+        transition: all .2s;
     }
 
     .down {
@@ -133,7 +157,7 @@ button {
     position: relative;
 }
 
-.caps-lock::before {
+.caps-lock-passive::before {
     content: '';
     position: absolute;
     width: 10px;
@@ -142,15 +166,29 @@ button {
     background-color: red;
     right: 10px;
 }
-
-.active::before {
+.caps-lock-active::before {
     content: '';
+    z-index: 10;
     position: absolute;
     width: 10px;
     height: 10px;
     border-radius: 50%;
-    background-color: green;
+    background-color:GREEN;
     right: 10px;
+}
+
+.enter .keyboard__key-active::after {
+    content: '';
+    position: absolute;
+    top: 49px;
+    bottom: 0;
+    right: 0;
+    width: 52px;
+    height: 57px;
+    border: none;
+    border-bottom-right-radius: 4px;
+    border-bottom-left-radius: 4px;
+    background-color: rgb(40, 38, 38);;
 }
 
 .space {
@@ -160,6 +198,10 @@ button {
 .last-btn {
    align-self: flex-end;
 }
+
+/* .active {
+    background-color: green;
+} */
 
 .arrow-block {
 
