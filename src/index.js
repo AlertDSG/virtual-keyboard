@@ -1,14 +1,10 @@
 // eslint-disable-next-line import/extensions
 import data from './db.js';
 
-// // eslint-disable-next-line import/extensions
-// import Letters from './class.js';
-
 let lang = 'ru';
 let value;
 
-const arr = ['Backspace', 'ControlLeft', 'MetaLeft', 'AltLeft', 'AltRight', 'ContextMenu', 'ControlRight', 'ShiftLeft', 'Enter'];
-// const keys = new Letters(lang, data);
+const arr = ['Backspace', 'ControlLeft', 'MetaLeft', 'AltLeft', 'AltRight', 'ContextMenu', 'ControlRight', 'ShiftLeft', 'Enter', 'CapsLock', 'ShiftRight'];
 
 function getLocal() {
   if (localStorage.getItem('data')) {
@@ -25,6 +21,11 @@ function setStorage() {
 }
 
 function logDownKey(e) {
+  if (!document.querySelector(`.keyboard__key[data--Key=${e.code}]`)) {
+    e.preventDefault();
+    return;
+  };
+
   if (e.code === 'CapsLock') {
     const capsLock = document.querySelector('.caps-lock');
     let keyActive;
@@ -54,7 +55,8 @@ function logDownKey(e) {
     document.querySelector('.enter').classList.add('enter-active');
   } else if (e.code === 'AltLeft') {
     e.preventDefault();
-  } else if (!arr.includes(e.code)) {
+    document.querySelector(`.keyboard__key[data--Key=${e.code}]`).classList.add('keyboard__key-active');
+  } else if (!arr.includes(e.code) && !document.querySelector(`.keyboard__key[data--Key=${e.code}]`)) {
     e.preventDefault();
     document.querySelector('.text-field').value += document.querySelector(`.keyboard__key[data--Key=${e.code}]`).innerText;
   }
@@ -62,6 +64,11 @@ function logDownKey(e) {
 }
 
 function logUpKey(e) {
+  if (!document.querySelector(`.keyboard__key[data--Key=${e.code}]`)) {
+    e.preventDefault();
+    return;
+  };
+
   if (document.querySelector('.keyboard__key[data--Key=ShiftLeft]').classList.contains('keyboard__key-active') && document.querySelector('.keyboard__key[data--Key=AltLeft]').classList.contains('keyboard__key-active')) {
     lang = lang === 'ru' ? 'en' : 'ru';
     value = document.querySelector('.text-field').value;
@@ -112,7 +119,9 @@ function init() {
       child.classList.add('space');
     } else if (child.dataset.Key === 'ArrowDown') {
       child.classList.add('down');
-    } else if (child.dataset.Key.includes('BracketRight') || child.dataset.Key.includes('Key') || child.dataset.Key.includes('Backquote') || child.dataset.Key.includes('BracketLeft') || child.dataset.Key.includes('Semicolon') || child.dataset.Key.includes('Quote') || child.dataset.Key.includes('Comma') || child.dataset.Key.includes('Period')) {
+    } else if (child.dataset.Key === 'ArrowUp') {
+      child.classList.add('up');
+    } else if (!arr.includes(child.dataset.Key)) {
       child.classList.add('key-low');
     }
     child.classList.add('keyboard__key');
@@ -130,6 +139,7 @@ function init() {
 window.addEventListener('DOMContentLoaded', init);
 
 document.addEventListener('mousedown', (e) => {
+  console.log(e.target.dataset.Key)
   if (e.target.dataset.Key) {
     if (e.target.dataset.Key === 'Tab') {
       document.querySelector('.text-field').value += '\t';
@@ -141,13 +151,17 @@ document.addEventListener('mousedown', (e) => {
       document.querySelector('.text-field').value += '\n';
       document.querySelector('.enter').classList.remove('enter-passive');
       document.querySelector('.enter').classList.add('enter-active');
+    } if (e.target.dataset.Key === 'AltLeft') {
+      document.querySelector(`.keyboard__key[data--Key=${e.target.dataset.Key}]`).classList.add('keyboard__key-active');
+    } else if (e.target.dataset.Key === 'Backspace') {
+      const textField = document.querySelector('.text-field');
+      textField.value = textField.value.slice(0, -1);
+      document.querySelector(`.keyboard__key[data--Key=${e.target.dataset.Key}]`).classList.add('keyboard__key-active');
     } else {
       logDownKey({ code: e.target.dataset.Key, key: e.target.innerText });
     }
     document.querySelector(`.keyboard__key[data--Key=${e.target.dataset.Key}]`).classList.add('keyboard__key-active');
   }
-
-  document.querySelector(`.keyboard__key[data--Key=${e.target.dataset.Key}]`).classList.add('keyboard__key-active');
 });
 
 document.addEventListener('mouseup', (e) => {
